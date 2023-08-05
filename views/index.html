@@ -9,12 +9,26 @@
   </head>
   <body style=" background-color: rgb(36, 34, 34); color: white;">
     
-    <div class="container p-4">
+  <div class="container p-4">
         <h1>Lista de Autores</h1>
-        
-        <table class="table table-dark table-striped" id="productsList">
+        <div class="mb-3">
+          <label for="formGroupExampleInput" class="form-label">Busqueda</label>
+          <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Example input placeholder">
+          
+        </div>
+        <button class="btn btn-primary" type="button" id="btnAdd">Agregar producto</button>
+        <button type="button" onclick="browsePerson()" class="btn btn-primary">Filtrar</button>
+        <button
+        class="btn btn-danger"
+        onclick="deleteProduct()"
+      >
+        Delete 🗑️
+      </button>
+        <div class="card-body" id="productsList">
+                
+        </div>
            
-    <button class="btn btn-primary" type="button" id="btnAdd">Agregar producto</button>
+   
   <div class="container" >
   <div class="modal" id="modalAdd" style="background-color: rgb(41, 32, 32);">
     <div class="form-content">
@@ -22,34 +36,23 @@
       <div class="form-body">
         <form id="formAdd" >
           <div class="control">
-            <label class="form-label">idDish: </label>
-            <input class="form-control" type="text" name="idDish">
-          </div>
-          <div class="control">
-            <label class="form-label">Name:</label>
+            <label class="form-label">Name: </label>
             <input class="form-control" type="text" name="name">
           </div>
           <div class="control">
-            <label class="form-label">calories: </label>
-            <input class="form-control" type="number" name="calories">
-          </div>
-    
-         
-          <div class="control">
-                <label class="form-check-label" for="gridCheck">
-                    isVegetarian
-                  </label>
-              <input class="form-check-input" type="checkbox" id="gridCheck" name="isVegetarian">
-            </div>
+            <label class="form-label">Decription:</label>
+            <input class="form-control" type="text" name="description">
           </div>
           <div class="control">
             <label class="form-label">value: </label>
             <input class="form-control" type="number" name="value">
           </div>
+
           <div class="control">
-            <label class="form-label">comments: </label>
-            <input class="form-control" type="text" name="comments">
+            <label class="form-label">caducacion: </label>
+            <input class="form-control" type="date" name="dateExpired">
           </div>
+        
         </form>
       </div>
       <div class="form-footer">
@@ -62,14 +65,11 @@
   </div>
 
 
-            <div class="mb-3">
-                <label for="formGroupExampleInput" class="form-label">Busqueda</label>
-                <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Example input placeholder">
-              </div>
-            <button type="button" onclick="browsePerson()" class="btn btn-primary">Filtrar</button>
+           
+         
             
             
-        </table>
+     
         
     </div>
     <script src="scripts.js"></script>

@@ -1,84 +1,19 @@
 
-/*
-function loadAuthors(){
-    return new Promise((resolve,reject)=>{
-        fetch(API_URL)
-            .then(resp => resp.json())
-            .then(resp => resolve(resp))
-            .catch( err => reject(err))
-    })
-}
-const loadData = ()=>{
-    const id = document.getElementById('idAuthor').value    
-    const name = document.getElementById('nameAuthor').value    
-    const birthday = document.getElementById('birthday').value    
-
-    const data = {"id":`${id}`, "name":`${name}`, "birthday":`${birthday}`}
-
-    return JSON.stringify(data)
-}
-
-document.getElementById('btnSend').addEventListener('click',()=>{
-    const URL = "http://localhost:3000/authors"
-
-    fetch(URL,{
-        method:"POST",
-        headers:{
-            "Content-Type":"application/json"
-        },
-        body: loadData()
-    }).then( resp => resp.json())
-        .then( resp => {
-            if( resp.state ){
-                alert('Okkk')
-            }else{
-                alert('Noooo')
-            }          
-        })
-        .catch(err => {
-            alert(`Error ${err}`)
-        })
-})
-
-document.getElementById('btnSend').addEventListener('click',()=>{
-    const URL = "http://localhost:3000/authors"
-
-    fetch(URL,{
-        method:"POST",
-        headers:{
-            "Content-Type":"application/json"
-        },
-        body: loadData()
-    }).then( resp => resp.json())
-        .then( resp => {
-            if( resp.state ){
-                alert('Okkk')
-            }else{
-                alert('Noooo')
-            }          
-        })
-        .catch(err => {
-            alert(`Error ${err}`)
-        })
-})*/
-
-
-
-const API_URL ='https://api-dishes.vercel.app/'
+const API_URL ='https://api-market-bivz.vercel.app/'
 let products=[];
 let listHTML="";
 
 
 
 const getProducts= ()=>{
-fetch(API_URL)
+fetch(`${API_URL}/api/product/`)
 .then(response => response.json())
 .catch(error => {
     alertManager('error', 'Ocurrión un problema al cargar los productos');
   })
 .then(data=>{
     products = data.data;
-   
+   console.log(data.data)
     renderResult(data.data);
     
 })
@@ -88,38 +23,19 @@ const productsList= document.querySelector('#productsList')
 const renderResult = (products)=>{
 
   
-    listHTML += `
-    <thead>
-    <tr>
-    <th scope="col">Detalles</th>
-    <th scope="col">Id</th>
-    <th scope="col">idDish</th>
-    <th scope="col">Name</th>
-    <th scope="col">Calories</th>
-    <th scope="col">Vegetarian</th>
-    <th scope="col">value</th>
-    <th scope="col">comments</th>
-    </tr>
-   </thead>
-    `
    products.forEach(product=> {
     listHTML += `
     
-        <tbody>
-        
-            <tr>
-            <td> <button type="button" onclick="browsePerson()" class="btn btn-primary">Detalles</button></td>
-            <td>${product._id}</td>
-            <td>${product.idDish}</td>
-            <td>${product.name}</td>
-            <td>${product.calories}</td>
-            <td>${product.isVegetarian ? 'Sí' : 'No'}</td>
-            <td>${product.value}</td>
-            <td>${product.comments}</td>
-        
-            
-            </tr>
-        </tbody>
+        <h5 class="card-title">${product.description}</h5>
+        <ul>
+        <li>_id: ${product._id}</li>
+        <li>Descripcion: ${product.description}</li>
+        <li>Precio: ${product.value}</li>
+        <li>Caducacion: ${product.dateExpired.slice(0, 10)}</li>
+    </ul>
+        <div class="container text-end">
+      
+     
         
     `
   
@@ -127,6 +43,27 @@ const renderResult = (products)=>{
    productsList.innerHTML= listHTML;
 }
 
+
+const deleteProduct=()=>{
+    const productId  = prompt("Ingresa el ID del producto que deseas eliminar:");
+
+
+    fetch(`${API_URL}/api/product/${productId}`, {
+        method: 'DELETE'
+      })
+      .then(response => {
+        if (response.ok) {
+          // Producto eliminado exitosamente, puedes mostrar un mensaje o actualizar la página, etc.
+          console.log('Producto eliminado correctamente');
+        } else {
+          // Hubo un error al eliminar el producto, puedes mostrar un mensaje de error, etc.
+          console.error('Error al eliminar el producto');
+        }
+      })
+      .catch(error => {
+        console.error('Error de red:', error);
+      });
+}
 const browsePerson=()=>{
 
     const searchInput = document.getElementById('formGroupExampleInput').value;
@@ -141,20 +78,7 @@ listHTML = ""; // Asignar una cadena vacía para vaciar la variable
 // Ahora que listHTML está vacío, el contenido del elemento "productsList" también se borrará
 productsList.innerHTML = listHTML;
 
-    listHTML += `
-    <thead>
-    <tr>
-    <th scope="col">Detalles</th>
-    <th scope="col">Id</th>
-    <th scope="col">idDish</th>
-    <th scope="col">Name</th>
-    <th scope="col">Calories</th>
-    <th scope="col">Vegetarian</th>
-    <th scope="col">value</th>
-    <th scope="col">comments</th>
-    </tr>
-   </thead>
-    `
+  
     console.log("data: ",searchInput);
    products.forEach(product=> {
     if (
@@ -164,20 +88,29 @@ productsList.innerHTML = listHTML;
     console.log(`${product.name}`);
     listHTML += `
     
-        <tbody>
-        
-            <tr>
-            <td> <button type="button" onclick="browsePerson()" class="btn btn-primary">Detalles</button></td>
-            <td>${product._id}</td>
-            <td>${product.idDish}</td>
-            <td>${product.name}</td>
-            <td>${product.calories}</td>
-            <td>${product.isVegetarian ? 'Sí' : 'No'}</td>
-            <td>${product.value}</td>
-            <td>${product.comments}</td>
-            
-            </tr>
-        </tbody>
+    <h5 class="card-title">Nombre ${product.name}</h5>
+    <ul>
+        <li>_id: ${product._id}</li>
+        <li>Descripcion: ${product.description}</li>
+        <li>Precio: ${product.value}</li>
+        <li>Caducacion: ${product.dateExpired.slice(0, 10)}</li>
+    </ul>
+    <div class="container text-end">
+    <button
+      class="btn btn-secondary"
+      type="button"
+      data-bs-toggle="modal"
+      data-bs-target="#editTeamModal"
+      style="background-color: rgb(35, 16, 141);"
+    >
+      Edit ✏️
+    </button>
+    <button
+      class="btn btn-danger"
+      
+    >
+      Delete 🗑️
+    </button>
         
     `
       }
@@ -209,62 +142,39 @@ const openModalAdd = () => {
 
 const createProduct = () => {
    
-        // Obtener los datos del formulario
         const formData = new FormData(document.querySelector('#formAdd'));
-      
-        // Verificar si todos los campos del formulario están llenos
-        if (
-          !formData.get('idDish') ||
-          !formData.get('name') ||
-          !formData.get('calories') ||
-          !formData.get('isVegetarian') ||
-          !formData.get('value') ||
-          !formData.get('comments')
-        ) {
-          document.querySelector('#msgFormAdd').innerHTML = '* Llena todos los campos';
-          return;
-        }
-
-         // Obtener el valor del campo calories
-
-
-
+       alert("holaa");
         document.querySelector('#msgFormAdd').innerHTML = '';
       
         // Crear el objeto product con los datos del formulario
         const product = {
-            
-          idDish: formData.get('idDish'),
+          
           name: formData.get('name'),
-          calories: formData.get('calories'),
-          isVegetarian: formData.get('isVegetarian') === 'on', // Convertir el valor del checkbox a booleano
-          value: formData.get('value'),
-          comments: formData.get('comments'),
+          description: formData.get('description'),
+          value: formData.get('value'), // Convertir el valor del checkbox a booleano
+          dateExpired: formData.get('dateExpired'),
+          
         };
       
         console.log(product);
       
-        // Enviar el objeto product al servidor como una cadena JSON
         fetch(API_URL, {
           method: 'POST',
-          body: JSON.stringify(product), // Convertir el objeto product en una cadena JSON
+          body: JSON.stringify(product),
           headers: {
-            'Content-Type': 'application/json', // Especificar que se está enviando una cadena JSON en el cuerpo de la solicitud
-          },
-        })
-          .then((response) => response.json())
-          .then((response) => {
-            if (response.state) {
-              alertManager('success', 'Plato creado exitosamente.');
-              getProducts();
-            } else {
-              alertManager('error', 'Error al crear el plato.');
-            }
+            'Content-Type': 'application/json'
+          }
+        }).then(res => res.json())
+          .catch(error => {
+          alertManager('error', error);
+          document.querySelector('#formAdd').reset();
           })
-          .catch((error) => {
-            alertManager('error', 'Ocurrió un problema al crear el plato.');
-            console.error('Error:', error);
-          });
+          .then(response => {
+          alertManager('success', response.mensaje)
+        
+
+          })
+        
       };
       
   
